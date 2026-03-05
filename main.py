@@ -143,6 +143,9 @@ def iniciar_servidor():
 threading.Thread(target=iniciar_servidor, daemon=True).start()
 
 while True:
-    executar_rpa()
+    try:
+        executar_rpa()
+    except Exception as e:
+        print(f"Erro na execução do RPA: {e}")
     print(f"Aguardando {INTERVALO_SEGUNDOS} segundos para próxima execução...")
     time.sleep(INTERVALO_SEGUNDOS)
