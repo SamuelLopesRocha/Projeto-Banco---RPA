@@ -23,18 +23,18 @@ def enviar_email(destinatario, assunto, nome_template, dados):
     html = carregar_template(nome_template, dados)
 
     response = requests.post(
-        "https://api.mailersend.com/v1/email",
+        "https://api.brevo.com/v3/smtp/email",
         headers={
-            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "api-key": RESEND_API_KEY,
             "Content-Type": "application/json",
         },
         json={
-            "from": {"name": "Banco Atlas", "email": EMAIL_REMETENTE},
+            "sender": {"name": "Banco Atlas", "email": EMAIL_REMETENTE},
             "to": [{"email": destinatario}],
             "subject": assunto,
-            "html": html,
+            "htmlContent": html,
         }
     )
 
-    if response.status_code not in (200, 202):
-        raise Exception(f"Mailersend erro {response.status_code}: {response.text}")
+    if response.status_code not in (200, 201, 202):
+        raise Exception(f"Brevo erro {response.status_code}: {response.text}")
