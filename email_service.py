@@ -1,5 +1,5 @@
 import os
-from mailersend import emails
+import requests
 from config import EMAIL_REMETENTE, RESEND_API_KEY
 
 
@@ -22,12 +22,19 @@ def carregar_template(nome_template, dados):
 def enviar_email(destinatario, assunto, nome_template, dados):
     html = carregar_template(nome_template, dados)
 
-    mailer = emails.NewEmail(RESEND_API_KEY)
+    response = requests.post(
+        "https://api.mailersend.com/v1/email",
+        headers={
+            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "from": {"name": "Banco Atlas", "email": EMAIL_REMETENTE},
+            "to": [{"email": destinatario}],
+            "subject": assunto,
+            "html": html,
+        }
+    )
 
-    mail_body = {}
-    mailer.set_mail_from({"name": "Banco Atlas", "email": EMAIL_REMETENTE}, mail_body)
-    mailer.set_mail_to([{"email": destinatario}], mail_body)
-    mailer.set_subject(assunto, mail_body)
-    mailer.set_html_content(html, mail_body)
-
-    mailer.send(mail_body)
+    if response.status_code not in (200, 202):
+        raise Exception(f"Mailersend erro {response.status_code}: {response.text}")

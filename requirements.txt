@@ -1,4 +1,4 @@
 pymongo
 dnspython
 python-dotenv
-mailersend
+requests
