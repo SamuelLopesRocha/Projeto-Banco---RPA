@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body { font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px; }
+.card { max-width: 600px; background: white; margin: auto; border-radius: 10px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.header { text-align: center; font-size: 22px; font-weight: bold; color: #1a73e8; }
+.content { margin-top: 15px; font-size: 16px; color: #333; line-height: 1.6; }
+.btn { display: block; width: fit-content; margin: 25px auto; padding: 14px 28px; background-color: #1a73e8; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; }
+.footer { margin-top: 25px; font-size: 12px; text-align: center; color: #777; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">🏦 Banco Atlas</div>
+    <div class="content">
+      <p>Olá <strong>{{nome}}</strong>,</p>
+      <p>Você se cadastrou no Banco Atlas! Para ativar sua conta, confirme seu e-mail clicando no botão abaixo:</p>
+      <a class="btn" href="{{link_verificacao}}">✅ Confirmar meu e-mail</a>
+      <p>Se você não criou uma conta, ignore este e-mail.</p>
+    </div>
+    <div class="footer">
+      © 2026 Banco Atlas — Este é um e-mail automático. Não responda esta mensagem.
+    </div>
+  </div>
+</body>
+</html>

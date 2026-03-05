@@ -1,6 +1,8 @@
 #cd "/c/Users/Familia Rocha/OneDrive/Anexos de email/Desktop/Projeto Banco/src/rpa"
 
 from db_connection import (
+    get_usuarios_pendentes_verificacao,
+    marcar_email_verificacao_enviado,
     get_usuarios_pendentes_email,
     marcar_email_usuario_enviado,
     get_contas_poupanca_pendentes_email,
@@ -11,6 +13,40 @@ from db_connection import (
 from email_service import enviar_email
 
 print("Buscando usuarios pendentes...")
+
+
+# ==============================
+# 👤 VERIFICAÇÃO DE EMAIL
+# ==============================
+
+print("Buscando usuários pendentes de verificação...")
+
+pendentes_verificacao = get_usuarios_pendentes_verificacao()
+
+for usuario in pendentes_verificacao:
+    nome = usuario["nome_completo"]
+    email  = usuario["email"]
+    usuario_id = usuario["usuario_id"]
+    token = usuario["token_verificacao"]
+    link = f"http://localhost:8000/usuarios/verificar-email?token={token}"
+
+    print(f"Enviando email de verificação para {nome}")
+
+    try:
+        enviar_email(
+            destinatario=email,
+            assunto="Verifique seu e-mail para verificar sua conta! - Banco Atlas",
+            nome_template="email_verificacao.html",
+            dados={
+                "nome": nome,
+                "link_verificacao": link
+            }
+        )
+        marcar_email_verificacao_enviado(usuario_id)
+        print(f"Email de verificação enviado e confirmado para {nome}")
+    except Exception as e:
+        print(f"Erro ao enviar email de verificação para {nome}: {e}")
+
 
 # ==============================
 # 👤 CADASTRO
@@ -25,19 +61,22 @@ for usuario in usuarios:
 
     print(f"Enviando email de cadastro para {nome}")
 
-    enviar_email(
-        destinatario=email,
-        assunto=" Sua conta corrente foi criada!",
-        nome_template="email_boas_vindas.html",
-        dados={
-            "nome": nome,
-            "agencia": "0001",
-            "numero_conta": "123456",
-            "digito": "7"
-        }
-    )
-
-    marcar_email_usuario_enviado(usuario_id)
+    try:
+        enviar_email(
+            destinatario=email,
+            assunto=" Sua conta corrente foi criada!",
+            nome_template="email_boas_vindas.html",
+            dados={
+                "nome": nome,
+                "agencia": "0001",
+                "numero_conta": "123456",
+                "digito": "7"
+            }
+        )
+        marcar_email_usuario_enviado(usuario_id)
+        print(f"Email de cadastro enviado e confirmado para {nome}")
+    except Exception as e:
+        print(f"Erro ao enviar email de cadastro para {nome}: {e}")
 
 
 # ==============================
@@ -56,19 +95,22 @@ for conta in contas:
 
     print(f"Enviando email poupança para {nome}")
 
-    enviar_email(
-        destinatario=email,
-        assunto="Sua conta poupança foi criada!",
-        nome_template="email_conta_poupanca.html",
-        dados={
-            "nome": nome,
-            "agencia": conta["agencia"],
-            "numero_conta": conta["numero_conta"],
-            "digito": conta["digito"],
-            "taxa_rendimento": "0,5%"
-        }
-    )
-
-    marcar_email_poupanca_enviado(conta["id_conta"])
+    try:
+        enviar_email(
+            destinatario=email,
+            assunto="Sua conta poupança foi criada!",
+            nome_template="email_conta_poupanca.html",
+            dados={
+                "nome": nome,
+                "agencia": conta["agencia"],
+                "numero_conta": conta["numero_conta"],
+                "digito": conta["digito"],
+                "taxa_rendimento": "0,5%"
+            }
+        )
+        marcar_email_poupanca_enviado(conta["id_conta"])
+        print(f"Email de poupança enviado e confirmado para {nome}")
+    except Exception as e:
+        print(f"Erro ao enviar email de poupança para {nome}: {e}")
 
 print("Processo finalizado.")
