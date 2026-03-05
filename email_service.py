@@ -1,8 +1,6 @@
 import os
-import resend
+from mailersend import emails
 from config import EMAIL_REMETENTE, RESEND_API_KEY
-
-resend.api_key = RESEND_API_KEY
 
 
 def carregar_template(nome_template, dados):
@@ -24,11 +22,12 @@ def carregar_template(nome_template, dados):
 def enviar_email(destinatario, assunto, nome_template, dados):
     html = carregar_template(nome_template, dados)
 
-    params: resend.Emails.SendParams = {
-        "from": f"Banco Atlas <{EMAIL_REMETENTE}>",
-        "to": [destinatario],
-        "subject": assunto,
-        "html": html,
-    }
+    mailer = emails.NewEmail(RESEND_API_KEY)
 
-    resend.Emails.send(params)
+    mail_body = {}
+    mailer.set_mail_from({"name": "Banco Atlas", "email": EMAIL_REMETENTE}, mail_body)
+    mailer.set_mail_to([{"email": destinatario}], mail_body)
+    mailer.set_subject(assunto, mail_body)
+    mailer.set_html_content(html, mail_body)
+
+    mailer.send(mail_body)
