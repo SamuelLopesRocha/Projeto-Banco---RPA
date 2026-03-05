@@ -1,8 +1,8 @@
-import smtplib
 import os
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from config import EMAIL_REMETENTE, EMAIL_SENHA, SMTP_SERVIDOR, SMTP_PORTA
+import resend
+from config import EMAIL_REMETENTE, RESEND_API_KEY
+
+resend.api_key = RESEND_API_KEY
 
 
 def carregar_template(nome_template, dados):
@@ -15,7 +15,6 @@ def carregar_template(nome_template, dados):
     with open(caminho, "r", encoding="utf-8") as file:
         html = file.read()
 
-    # Substitui todas as variáveis dinamicamente
     for chave, valor in dados.items():
         html = html.replace(f"{{{{{chave}}}}}", str(valor))
 
@@ -23,20 +22,13 @@ def carregar_template(nome_template, dados):
 
 
 def enviar_email(destinatario, assunto, nome_template, dados):
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_REMETENTE
-    msg["To"] = destinatario
-    msg["Subject"] = assunto
-
     html = carregar_template(nome_template, dados)
-    msg.attach(MIMEText(html, "html"))
 
-    if SMTP_PORTA == 465:
-        with smtplib.SMTP_SSL(SMTP_SERVIDOR, SMTP_PORTA) as server:
-            server.login(EMAIL_REMETENTE, EMAIL_SENHA)
-            server.send_message(msg)
-    else:
-        with smtplib.SMTP(SMTP_SERVIDOR, SMTP_PORTA) as server:
-            server.starttls()
-            server.login(EMAIL_REMETENTE, EMAIL_SENHA)
-            server.send_message(msg)
+    params: resend.Emails.SendParams = {
+        "from": f"Banco Atlas <{EMAIL_REMETENTE}>",
+        "to": [destinatario],
+        "subject": assunto,
+        "html": html,
+    }
+
+    resend.Emails.send(params)
