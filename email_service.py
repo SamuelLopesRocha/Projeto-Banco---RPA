@@ -31,7 +31,12 @@ def enviar_email(destinatario, assunto, nome_template, dados):
     html = carregar_template(nome_template, dados)
     msg.attach(MIMEText(html, "html"))
 
-    with smtplib.SMTP(SMTP_SERVIDOR, SMTP_PORTA) as server:
-        server.starttls()
-        server.login(EMAIL_REMETENTE, EMAIL_SENHA)
-        server.send_message(msg)
+    if SMTP_PORTA == 465:
+        with smtplib.SMTP_SSL(SMTP_SERVIDOR, SMTP_PORTA) as server:
+            server.login(EMAIL_REMETENTE, EMAIL_SENHA)
+            server.send_message(msg)
+    else:
+        with smtplib.SMTP(SMTP_SERVIDOR, SMTP_PORTA) as server:
+            server.starttls()
+            server.login(EMAIL_REMETENTE, EMAIL_SENHA)
+            server.send_message(msg)
