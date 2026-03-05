@@ -3,84 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f6f8;
-  padding: 20px;
-}
-
-.card {
-  max-width: 600px;
-  background: white;
-  margin: auto;
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.header {
-  text-align: center;
-  font-size: 22px;
-  font-weight: bold;
-  color: #1a73e8;
-}
-
-.content {
-  margin-top: 15px;
-  font-size: 16px;
-  color: #333;
-  line-height: 1.6;
-}
-
-.info-box {
-  background: #f0f4ff;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 15px;
-  font-size: 15px;
-}
-
-.footer {
-  margin-top: 25px;
-  font-size: 12px;
-  text-align: center;
-  color: #777;
-}
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #0A0A0A;
+    padding: 30px 10px;
+    margin: 0;
+  }
+  .card {
+    max-width: 600px;
+    background: linear-gradient(180deg, #141414 0%, #0A0A0A 100%);
+    margin: auto;
+    border-radius: 32px;
+    padding: 40px 36px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .logo {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #CFAA56;
+    background: rgba(207,170,86,0.08);
+    border: 1px solid rgba(207,170,86,0.3);
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 999px;
+  }
+  .title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #F4E3B2;
+    margin-top: 20px;
+    line-height: 1.2;
+  }
+  .title span {
+    background: linear-gradient(180deg, #F4E3B2, #CFAA56, #9B7C37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .content {
+    font-size: 15px;
+    color: #9ca3af;
+    line-height: 1.7;
+  }
+  .content p {
+    margin: 12px 0;
+  }
+  .content strong {
+    color: #F4E3B2;
+  }
+  .info-box {
+    background: #121212;
+    border: 1px solid rgba(207,170,86,0.2);
+    border-left: 3px solid #CFAA56;
+    padding: 20px 24px;
+    border-radius: 16px;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  .info-box p {
+    margin: 8px 0;
+    color: #9ca3af;
+  }
+  .info-box strong {
+    color: #CFAA56;
+  }
+  .info-badge {
+    display: inline-block;
+    background: rgba(207,170,86,0.1);
+    color: #CFAA56;
+    border: 1px solid rgba(207,170,86,0.25);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 28px 0;
+  }
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .feature-list li {
+    color: #9ca3af;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .feature-list li::before {
+    content: '✦ ';
+    color: #CFAA56;
+  }
+  .footer {
+    margin-top: 36px;
+    font-size: 11px;
+    text-align: center;
+    color: rgba(255,255,255,0.2);
+    line-height: 1.6;
+  }
 </style>
 </head>
-
 <body>
   <div class="card">
     <div class="header">
-      💳 Banco Atlas
+      <span class="logo">Atlas Bank</span>
+      <div class="title">Conta criada com <span>sucesso</span> 🎉</div>
     </div>
 
     <div class="content">
-      <p>Olá <strong>{{nome}}</strong>,</p>
-
-      <p>É com prazer que informamos que sua conta foi criada com sucesso! 🎉</p>
-
-      <p>Sua <strong>conta corrente</strong> já está ativa e pronta para uso.</p>
+      <p>Olá, <strong>{{nome}}</strong>.</p>
+      <p>É com satisfação que informamos que sua <strong>conta corrente</strong> está ativa e pronta para uso no Banco Atlas.</p>
 
       <div class="info-box">
-        <p><strong>Agência:</strong> {{agencia}}</p>
-        <p><strong>Conta:</strong> {{numero_conta}}-{{digito}}</p>
-        <p><strong>Status:</strong> ATIVA ✅</p>
+        <p><strong>Agência</strong></p>
+        <p>{{agencia}}</p>
+        <p style="margin-top:14px"><strong>Conta</strong></p>
+        <p>{{numero_conta}}-{{digito}}</p>
+        <p style="margin-top:14px"><strong>Status</strong></p>
+        <span class="info-badge">ATIVA</span>
       </div>
 
-      <p>Você já pode:</p>
-      <ul>
-        <li>Realizar transferências</li>
-        <li>Efetuar pagamentos</li>
-        <li>Receber valores via PIX</li>
-        <li>Utilizar seu limite disponível</li>
-      </ul>
+      <div class="divider"></div>
 
-      <p>Seja bem-vindo ao futuro do banco digital.</p>
+      <p style="color:#F4E3B2; font-weight:bold; margin-bottom: 12px;">O que você já pode fazer:</p>
+      <ul class="feature-list">
+        <li>Pix e transferências ilimitadas</li>
+        <li>Efetuar pagamentos e compras</li>
+        <li>Receber seu salário</li>
+        <li>Utilizar seu limite de crédito</li>
+      </ul>
     </div>
 
     <div class="footer">
-      © 2026 Banco Atlas — Segurança e inovação <br>
+      © 2026 Banco Atlas — Segurança e inovação<br>
       Este é um e-mail automático. Não responda esta mensagem.
     </div>
   </div>
