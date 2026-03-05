@@ -1,6 +1,9 @@
 #cd "/c/Users/Familia Rocha/OneDrive/Anexos de email/Desktop/Projeto Banco/src/rpa"
 
 import time
+import os
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from db_connection import (
     get_usuarios_pendentes_verificacao,
@@ -120,6 +123,24 @@ def executar_rpa():
 
     print("Processo finalizado.")
 
+
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+
+    def log_message(self, format, *args):
+        pass  # silencia logs do servidor HTTP
+
+
+def iniciar_servidor():
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(("0.0.0.0", port), HealthHandler)
+    server.serve_forever()
+
+
+threading.Thread(target=iniciar_servidor, daemon=True).start()
 
 while True:
     executar_rpa()
