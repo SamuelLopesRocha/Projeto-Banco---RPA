@@ -17,14 +17,14 @@ from db_connection import (
 
 from email_service import enviar_email
 
-INTERVALO_SEGUNDOS = 30 # Tempo de espera entre cada execução. 30 Segundos é recomendado para não sobrecarregar o banco de dados e o serviço de email, mas pode ser ajustado conforme necessário.
+INTERVALO_SEGUNDOS = 30 
 
 
 def executar_rpa():
     print("Buscando usuarios pendentes...")
 
     # ==============================
-    # 👤 VERIFICAÇÃO DE EMAIL
+    # 👤 VERIFICAÇÃO DE EMAIL (COM CÓDIGO)
     # ==============================
 
     print("Buscando usuários pendentes de verificação...")
@@ -35,19 +35,18 @@ def executar_rpa():
         nome = usuario["nome_completo"]
         email  = usuario["email"]
         usuario_id = usuario["usuario_id"]
-        token = usuario["token_verificacao"]
-        link = f"http://localhost:8000/usuarios/verificar-email?token={token}"
+        codigo = usuario.get("codigo_verificacao") # 🔥 Captura o código em vez de token
 
-        print(f"Enviando email de verificação para {nome}")
+        print(f"Enviando email de código de verificação para {nome}")
 
         try:
             enviar_email(
                 destinatario=email,
-                assunto="Verifique seu e-mail para verificar sua conta! - Banco Atlas",
+                assunto="Seu código de ativação chegou! - Banco Atlas",
                 nome_template="email_verificacao.html",
                 dados={
                     "nome": nome,
-                    "link_verificacao": link
+                    "codigo": codigo # 🔥 Enviamos o código para ser substituído no HTML
                 }
             )
             marcar_email_verificacao_enviado(usuario_id)
@@ -57,7 +56,7 @@ def executar_rpa():
 
 
     # ==============================
-    # 👤 CADASTRO
+    # 👤 CADASTRO (BOAS VINDAS)
     # ==============================
 
     usuarios = get_usuarios_pendentes_email()
@@ -131,11 +130,11 @@ class HealthHandler(BaseHTTPRequestHandler):
         self.wfile.write(b"OK")
 
     def log_message(self, format, *args):
-        pass  # silencia logs do servidor HTTP
+        pass  
 
 
 def iniciar_servidor():
-    port = int(os.environ.get("PORT", 8080))
+    port = int(os.environ.get("PORT", 8081))
     server = HTTPServer(("0.0.0.0", port), HealthHandler)
     server.serve_forever()
 
